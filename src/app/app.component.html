@@ -1,11 +1,14 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    TEMPSENSOR: 
-  </h1>
-  <p *ngFor="let i of temp">Figure is: {{ i }}</p>
+<h1 style="text-align:center">
+  TEMPSENSOR: 
+</h1>
 
-  <!-- <ngx-charts-line-chart
+<div style="text-align:center; float: left; width: 20%">
+  <p *ngFor="let i of temp">Figure is: {{ i }} </p>
+</div>
+
+<div style="float:left">
+  <ngx-charts-line-chart
   [view]="view"
   [scheme]="colorScheme"
   [results]="multi"
@@ -19,7 +22,6 @@
   [yAxisLabel]="yAxisLabel"
   [autoScale]="autoScale"
   (select)="onSelect($event)">
-</ngx-charts-line-chart> -->
-
+</ngx-charts-line-chart>
 </div>
 

@@ -16,8 +16,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export class AppComponent {
   temp: any;
 
-  heartBeatData = [];
   multi = [];
+  series = [];
 
   // chart
   view: any[] = [700, 400];
@@ -47,66 +47,42 @@ export class AppComponent {
     this._heatBeat.getHeatBeat().subscribe(items => {
       console.log(items);
       this.temp = items;
-      // console.log(JSON.stringify(items[0]));
-      // this.data(items);
+      this.data(items);
     });
   }
 
   data(items) {
-    // this.heartBeatCount = [];
-    this.heartBeatData = [];
-    const multi = [{
-      'name': 'Germany',
-      'series': [
-        {
-          'name': '2010',
-          'value': 7300000
-        },
-        {
-          'name': '2011',
-          'value': 8940000
-        }
-      ]
-    },
-    {
-      'name': 'Germany',
-      'series': [
-        {
-          'name': '2010',
-          'value': 2200000
-        },
-        {
-          'name': '2011',
-          'value': 5540000
-        }
-      ]
-    }
-  ];
-    // for (const i in items) {
-    //   // const single = {
-    //   //   name: items[i].key,
-    //   //   value: items[i].payload
-    //   // };
+    // this.multi = [{
+    //   'name': 'abc',
+    //   'series': [
+    //     {
+    //       'name': '2010',
+    //       'value': 5
+    //     },
+    //     {
+    //       'name': '2011',
+    //       'value': 15
+    //     }
+    //   ]
+    // }];
 
-    //   const single = {
-    //     name: items[i].key,
-    //     series: [
-    //       {
-    //         name: '2010',
-    //         value: items[i].payload - 30
-    //       },
-    //       {
-    //         name: '2011',
-    //         value: items[i].payload
-    //       }
-    //     ]
-    //   }
-    //  // this.heartBeatData.push(single);
-    //   // this.multi.push(single);
-    // }
-    Object.assign(this, {multi});
-    console.log(JSON.stringify(this.heartBeatData[0]));
-    console.log(JSON.stringify(this.multi[0]));
+    for (const i in items) {
+      if (i) {
+        this.series[i] = {
+          'name': i + '',
+          'value': items[i]
+        };
+      }
+    }
+
+    this.multi = [{
+      'name': 'heart-beat',
+      'series': this.series
+    }];
+
+
+
+
   }
 
 }
