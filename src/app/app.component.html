@@ -3,11 +3,12 @@
   TEMPSENSOR: 
 </h1>
 
-<div style="text-align:center; float: left; width: 20%">
+<div style="text-align:center; float: left; width: 30%;">
+  <h3>PURSESENSOR</h3>
   <p *ngFor="let i of temp">Figure is: {{ i }} </p>
 </div>
 
-<div style="float:left">
+<div style="float:left;">
   <ngx-charts-line-chart
   [view]="view"
   [scheme]="colorScheme"
@@ -22,6 +23,28 @@
   [yAxisLabel]="yAxisLabel"
   [autoScale]="autoScale"
   (select)="onSelect($event)">
-</ngx-charts-line-chart>
+  </ngx-charts-line-chart>
+
+  <br><br>
+  <div style="width: 200px;">
+    <h1>BPM: {{ BPM }}</h1>
+  </div>
+
+  <div>
+    <h1>ThresHold</h1>
+    <input type="range" min="0" max="1000" (change)="sliderChange($event)" style="width: 500px;"/>
+    <br /><br />
+    Slider Value = <span id="sliderStatus">{{ ThresHold }}</span>
+    <br><br>
+    <Button type="button" (click)="set()">SET</Button>
+  </div>
+
+  <div>
+    <h1>SET ON / OFF HEARTBEAT</h1>
+    <Button type="button" (click)="setOn()" *ngIf="!ison" >SET ON</Button>
+    <Button type="button" (click)="setOff()" *ngIf="ison" >SET OFF</Button>
+  </div>
+
+
 </div>
 

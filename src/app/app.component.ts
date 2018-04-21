@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GetHeartBeatService } from './get-heart-beat.service';
 
 import { Observable } from 'rxjs/Observable';
 
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { NgxChartsModule, count } from '@swimlane/ngx-charts';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -13,8 +13,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent{
   temp: any;
+  count = -1;
+  ThresHold = 0;
+  ison: any;
+  BPM: any;
 
   multi = [];
   series = [];
@@ -45,13 +49,27 @@ export class AppComponent {
 
   constructor(private _heatBeat: GetHeartBeatService) {
     this._heatBeat.getHeatBeat().subscribe(items => {
-      console.log(items);
-      this.temp = items;
+      // console.log(Object.values(items)[0]);
+      // this.temp = items;
+      this.temp = Object.values(items);
       this.data(items);
+    });
+
+    this._heatBeat.getisOn().subscribe(data => {
+      if (data === 0) {
+        this.ison = false;
+      } else {
+        this.ison = true;
+      }
+    });
+
+    this._heatBeat.getBPM().subscribe(data => {
+      this.BPM = data;
     });
   }
 
   data(items) {
+    console.log(items);
     // this.multi = [{
     //   'name': 'abc',
     //   'series': [
@@ -68,9 +86,15 @@ export class AppComponent {
 
     for (const i in items) {
       if (i) {
-        this.series[i] = {
-          'name': i + '',
-          'value': items[i]
+        this.count++;
+        console.log(this.count);
+        console.log('key ' + i);
+        console.log('value ' + Object.values(items)[this.count]);
+        this.series[this.count] = {
+          // 'name': i + '',
+          // 'value': items[i]
+          'name': i,
+          'value': Object.values(items)[this.count]
         };
       }
     }
@@ -82,7 +106,27 @@ export class AppComponent {
 
 
 
+  }
 
+  sliderChange(val) {
+    console.log('thre ' + val.target.value);
+    // Use Ajax post to send the adjusted value to PHP or MySQL storage
+    this.ThresHold = val.target.value;
+  }
+
+  set() {
+    this._heatBeat.setDataThresHold(this.ThresHold);
+    alert('Set ThresHold succsessfully!');
+  }
+
+  setOn() {
+    this._heatBeat.setOn();
+    alert('SET ON SUCCESS!');
+  }
+
+  setOff() {
+    this._heatBeat.setOff();
+    alert('SET OFF SUCCESS!');
   }
 
 }
