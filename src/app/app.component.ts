@@ -13,12 +13,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent{
+export class AppComponent {
   temp: any;
   count = -1;
   ThresHold = 0;
   ison: any;
   BPM: any;
+  change = 0;
+  dem = 0;
 
   multi = [];
   series = [];
@@ -49,10 +51,28 @@ export class AppComponent{
 
   constructor(private _heatBeat: GetHeartBeatService) {
     this._heatBeat.getHeatBeat().subscribe(items => {
-      // console.log(Object.values(items)[0]);
-      // this.temp = items;
-      this.temp = Object.values(items);
-      this.data(items);
+      this.change++;
+      if (this.change === 1) {
+          // console.log(Object.values(items)[0]);
+          // this.temp = items;
+        // console.log(items);
+          this.temp = Object.values(items);
+          this.data(items);
+      } else {
+            this.count++;
+            const { [Object.keys(items).pop()]: lastItem } = items;
+            this.temp.push(lastItem);
+            const obj = Object.keys(items)[Object.keys(items).length - 1];
+            console.log(obj);
+            this.series[this.count] = {
+              'name': obj,
+              'value': lastItem
+            };
+            this.multi = [{
+              'name': 'heart-beat',
+              'series': this.series
+            }];
+      }
     });
 
     this._heatBeat.getisOn().subscribe(data => {
@@ -87,13 +107,13 @@ export class AppComponent{
     for (const i in items) {
       if (i) {
         this.count++;
-        console.log(this.count);
-        console.log('key ' + i);
-        console.log('value ' + Object.values(items)[this.count]);
+        // console.log(this.count);
+        // console.log('key ' + i);
+        // console.log('value ' + Object.values(items)[this.count]);
         this.series[this.count] = {
           // 'name': i + '',
           // 'value': items[i]
-          'name': i,
+          'name': Object.keys(items)[this.count],
           'value': Object.values(items)[this.count]
         };
       }
@@ -115,7 +135,7 @@ export class AppComponent{
   }
 
   set() {
-    this._heatBeat.setDataThresHold(this.ThresHold);
+    this._heatBeat.setDataThresHold(+this.ThresHold);
     alert('Set ThresHold succsessfully!');
   }
 
